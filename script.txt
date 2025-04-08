@@ -1,0 +1,30 @@
+CREATE TABLE Categorias(
+	CatID INT Primary Key Identity(1,1),
+	CatNombre Varchar(25),
+	CatDecripcion Varchar(200)
+)
+
+CREATE TABLE Productos(
+	ProID INT Primary Key Identity(1,1),
+	ProNombre Varchar(25),
+	ProDecripcion Varchar(200),
+	ProCosto decimal(13,2),
+	ProPrecio decimal(13,2),
+	ProEstado int,
+	ProFechaCreacion DATETIME
+)
+
+CREATE TABLE ProductosCategorias(
+	ProID INT NOT NULL,
+	CatID INT NOT NULL,
+	Primary KEY (ProID,CatID),
+	FOREIGN KEY (CatID) REFERENCES Categorias(CatID) ON DELETE CASCADE,
+	FOREIGN KEY (ProID) REFERENCES Productos(ProID) ON DELETE CASCADE 
+)
+
+SELECT * FROM Productos
+SELECT * FROM Categoria
+INSERT INTO Productos(ProNombre,ProDecripcion,ProCosto,ProPrecio,ProEstado,CatID,ProFechaCreacion)
+VALUES()
+
+SELECT * FROM Productos WHERE ProFechaCreacion between '' AND ''

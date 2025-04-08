@@ -1,0 +1,47 @@
+﻿@using TEST_EH_MVC.DTOs
+@model ProductosDTO
+@if (Model.Categorias.Any())
+{
+    <form asp-action="AddProducts" method="post" class="m-3 container align-content-center border rounded-3">
+        <div class="m-3">
+            <label class="form-label align-content-center">Crear producto</label>
+            <div class="mb-3">
+                <label asp-for="ProNombre" class="form-label">Nombre</label>
+                <input type="text" asp-for="ProNombre" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="ProDecripcion" class="form-label">Descripción</label>
+                <input type="text" asp-for="ProDecripcion" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ProPrecio" class="form-label">Precio</label>
+                <input type="number" asp-for="ProPrecio" class="form-control" />
+            </div>
+            <div class="mb-3">
+
+                <label asp-for="ProCosto" class="form-label">Costo</label>
+                <input type="number" asp-for="ProCosto" class="form-control" />
+            </div>
+            <div class="mb-3">
+                <label asp-for="ProEstado" class="form-label">Estado</label>
+                <input type="number" asp-for="ProEstado" class="form-control" />
+            </div>
+
+            <div>
+                <label asp-for="CatIDs" class="form-label">Categorias</label>
+                <select asp-for="CatIDs" asp-items="Model.CurrentCategory" multiple class="form-select">
+                </select>
+
+            </div>
+
+            <button type="submit" class="btn btn-primary form-control mt-3">Guardar Producto</button>
+        </div>
+    </form>
+
+}
+else
+{
+    <label>No tienes categorias definidas para agregar productos.</label>
+}
+

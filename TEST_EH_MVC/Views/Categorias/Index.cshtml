@@ -1,0 +1,20 @@
+﻿@using TEST_EH_MVC.DTOs
+@model CategoriasDTO
+
+
+<form asp-action="AddCategoria" method="post" class="m-3 container align-content-center border rounded-3">
+    <div class="m-3">
+        <label class="form-label align-content-center">Crear categorias</label>
+        <div class="mb-3">
+            <label asp-for="CatNombre" class="form-label">Nombre</label>
+            <input type="text" asp-for="CatNombre" class="form-control" />
+        </div>
+        <div class="mb-3">
+            <label asp-for="CatDescripcion" class="form-label">Descripción</label>
+            <input type="text" asp-for="CatDescripcion" class="form-control" />
+        </div>
+        
+
+        <button type="submit" class="btn btn-primary form-control mt-3">Guardar Categoria</button>
+    </div>
+</form>

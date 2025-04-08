@@ -1,0 +1,82 @@
+﻿@using TEST_EH_MVC.DTOs
+@model ProductosDTO
+
+@if (Model.Productos.Any())
+{
+    <table class="table table-responsive table-bordered">
+        <thead>
+            <tr>
+                <th>
+                    Nombre
+                </th>
+                <th>
+                    Descripcion
+                </th>
+
+                <th>
+                    Precio
+                </th>
+                <th>
+                    Costo
+                </th>
+
+                <th>
+                    Estado
+                </th>
+
+                <th>
+                    Categoria
+                </th>
+                <th>
+                    Acciones
+                </th>
+
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var pro in Model.Productos)
+            {
+                <tr>
+                    <td>@pro.ProNombre</td>
+                    <td>@pro.ProDecripcion</td>
+                    <td>@pro.ProPrecio</td>
+                    <td>@pro.ProCosto</td>
+                    <td>@pro.ProEstado</td>
+                    <td>
+                        @if (Model.Categorias != null && Model.Categorias.Any())
+                        {
+                            <ul class="mb-0 ps-1 ms-3">
+                                @foreach (var cat in Model.Categorias.Where(x => x.ProID == pro.ProID).ToList())
+                                {
+                                    <li>@cat.CatNombre</li>
+                                }
+                            </ul>
+                        }
+                        else
+                        {
+                            <span class="text-muted">Sin categorías</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="d-flex justify-content-center gap-2">
+                            <a asp-action="EditarProducto" asp-route-id="@pro.ProID" class="btn btn-sm btn-outline-success " title="Editar">
+                                <i class="bi bi-pencil-square"></i>
+                            </a>
+                            <a asp-action="EliminarProducto" asp-route-id="@pro.ProID" class="btn btn-sm btn-outline-danger " title="Editar">
+                                <i class="bi bi-trash"></i>
+                            </a>
+                        </div>
+                    </td>
+
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+else
+{
+    <label>No existen productos para mostrar.</label>
+}
+
+
+
