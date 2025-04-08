@@ -7,6 +7,7 @@ namespace TEST_EH_MVC
     {
         Task AddProducts(ProductosDTO productos);
         Task DeleteProduct(int proId);
+        Task EditarProducto(ProductosDTO producto);
         Task<IEnumerable<Productos>> FindProductosByCategoria(int statcatIDs);
         Task<IEnumerable<Productos>> FindProductosByStatus(int status);
         Task<IEnumerable<Productos>> GetProducts();

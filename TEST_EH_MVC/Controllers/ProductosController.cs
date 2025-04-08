@@ -12,7 +12,7 @@ namespace TEST_EH_MVC.Controllers
         private readonly ICategoriasRepository categoriasRepository;
         private readonly IMapper mapper;
 
-        public ProductosController(IProductosRepository productosRepository,ICategoriasRepository categoriasRepository, IMapper mapper)
+        public ProductosController(IProductosRepository productosRepository, ICategoriasRepository categoriasRepository, IMapper mapper)
         {
             this.productosRepository = productosRepository;
             this.categoriasRepository = categoriasRepository;
@@ -20,20 +20,29 @@ namespace TEST_EH_MVC.Controllers
         }
         public async Task<IActionResult> Index()
         {
-            var products = await productosRepository.GetProducts();
-            var productsIds = products.Select(x => x.ProID);
-            var categorias = await categoriasRepository.GetCategoriasByProIDs(productsIds.ToList());
-            var ProductosDTO = new ProductosDTO
+            try
             {
-                Productos = mapper.Map<List<ProductosDTO>>(products.ToList()),
-                Categorias = categorias.ToList(),
-                CurrentCategory = categorias.Select(c => new SelectListItem
+                var products = await productosRepository.GetProducts();
+                if (products is null || !products.Any()) return View(new ProductosDTO() { Productos = new List<ProductosDTO>() });
+                var productsIds = products.Select(x => x.ProID);
+                var categorias = await categoriasRepository.GetCategoriasByProIDs(productsIds.ToList());
+                var ProductosDTO = new ProductosDTO
                 {
-                    Value = c.CatID.ToString(),
-                    Text = c.CatNombre
-                }).ToList()
-            };
-            return View(ProductosDTO);
+                    Productos = mapper.Map<List<ProductosDTO>>(products.ToList()),
+                    Categorias = categorias.ToList(),
+                    CurrentCategory = categorias.Select(c => new SelectListItem
+                    {
+                        Value = c.CatID.ToString(),
+                        Text = c.CatNombre
+                    }).ToList()
+                };
+                return View(ProductosDTO);
+
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
         }
 
         public async Task<IActionResult> CrearProducto()
@@ -65,12 +74,38 @@ namespace TEST_EH_MVC.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [HttpPut]
+
         public async Task<IActionResult> EditarProducto(int proID)
         {
             try
             {
-                await productosRepository.GetProductsByID(proID);
+                var categorias = await categoriasRepository.GetCategorias();
+                var producto = await productosRepository.GetProductsByID(proID);
+                var editarProducto = mapper.Map<ProductosDTO>(producto);
+
+                //CurrentProduct = mapper.Map<ProductosDTO>(producto),
+                editarProducto.Categorias = mapper.Map<List<CategoriasDTO>>(categorias.ToList());
+                editarProducto.CurrentCategory = categorias.Select(c => new SelectListItem
+                {
+                    Value = c.CatID.ToString(),
+                    Text = c.CatNombre
+                }).ToList();
+
+                return View(editarProducto);
+            }
+            catch (Exception e)
+            {
+                return BadRequest(e.Message);
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> SaveProductoEditado(ProductosDTO producto)
+        {
+            try
+            {
+                if(!ModelState.IsValid) return View(producto);
+                await productosRepository.EditarProducto(producto);
                 return RedirectToAction("Index");
             }
             catch (Exception e)
@@ -78,7 +113,7 @@ namespace TEST_EH_MVC.Controllers
                 return BadRequest(e.Message);
             }
         }
-        [HttpDelete]
+
         public async Task<IActionResult> EliminarProducto(int proID)
         {
             try

@@ -1,0 +1,53 @@
+﻿@using TEST_EH_MVC.DTOs
+@model ProductosDTO
+
+<form asp-action="SaveProductoEditado" method="post" class="m-3 container align-content-center border rounded-3">
+    <input type="hidden" asp-for="ProID" />
+    <div class="m-3">
+        <label class="form-label align-content-center">Editar producto</label>
+        <div class="mb-3">
+            <label asp-for="ProNombre" class="form-label">Nombre</label>
+            <input type="text" asp-for="ProNombre" class="form-control" />
+            <span asp-validation-for="ProNombre" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ProDecripcion" class="form-label">Descripción</label>
+            <input type="text" asp-for="ProDecripcion" class="form-control" />
+            <span asp-validation-for="ProDecripcion" class="text-danger"></span>
+        </div>
+
+        <div class="mb-3">
+            <label asp-for="ProPrecio" class="form-label">Precio</label>
+            <input type="number" asp-for="ProPrecio" class="form-control" />
+            <span asp-validation-for="ProPrecio" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+
+            <label asp-for="ProCosto" class="form-label">Costo</label>
+            <input type="number" asp-for="ProCosto" class="form-control" />
+            <span asp-validation-for="ProCosto" class="text-danger"></span>
+        </div>
+        <div class="mb-3">
+            <label asp-for="ProEstado" class="form-label">Estado</label>
+            <input type="number" asp-for="ProEstado" class="form-control" />
+            <span asp-validation-for="ProEstado" class="text-danger"></span>
+        </div>
+
+        <div>
+            <label asp-for="CatIDs" class="form-label">Categorias</label>
+            <select asp-for="CatIDs" asp-items="Model.CurrentCategory" multiple class="form-select">
+            </select>
+            <span asp-validation-for="CatIDs" class="text-danger"></span>
+
+        </div>
+
+        <button type="submit" class="btn btn-primary form-control mt-3">Editar Producto</button>
+    </div>
+</form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+

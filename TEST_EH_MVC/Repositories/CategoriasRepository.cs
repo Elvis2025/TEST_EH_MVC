@@ -31,6 +31,8 @@ namespace TEST_EH_MVC.Repositories
         {
             try
             {
+                if (proIds == null || !proIds.Any())
+                    return Enumerable.Empty<CategoriasDTO>();
                 Query = @$"SELECT 
                                 c.CatID,
                                 pc.CatNombre,
@@ -40,7 +42,7 @@ namespace TEST_EH_MVC.Repositories
                            WHERE c.ProID IN @ProIDs";
                 return await connection.DbConnection.QueryAsync<CategoriasDTO>(Query, new { ProIDs = proIds });
             }
-            catch (Exception)
+            catch (Exception e)
             {
 
                 throw;

@@ -1,6 +1,8 @@
 ﻿using AutoMapper;
 using Dapper;
 using Dapper.Contrib.Extensions;
+using System.Data.Common;
+using System.Transactions;
 using TEST_EH_MVC.DTOs;
 using TEST_EH_MVC.Model;
 
@@ -59,6 +61,41 @@ namespace TEST_EH_MVC.Repositories
             }
             catch (Exception)
             {
+                throw;
+            }
+        }
+
+        public async Task EditarProducto(ProductosDTO producto)
+        {
+            using var dbConnection = connection.DbConnection;
+            var transacction = dbConnection.BeginTransaction();
+            try
+            {
+
+                Query = $@"DELETE ProductosCategorias WHERE ProID = {producto.ProID}";
+                await dbConnection.ExecuteAsync(Query,transaction: transacction);
+
+
+                   Query = $@"UPDATE Productos 
+	                                SET ProNombre = '{producto.ProNombre}', 
+		                                ProDecripcion = '{producto.ProDecripcion}', 
+		                                ProCosto = '{producto.ProCosto}', 
+		                                ProEstado = '{producto.ProEstado}',
+		                                ProPrecio='{producto.ProPrecio}' 
+	                                WHERE ProID = '{producto.ProID}'";
+
+                await dbConnection.ExecuteAsync(Query, transaction: transacction);
+                foreach (var item in producto.CatIDs)
+                {
+                    Query = $"INSERT INTO ProductosCategorias (ProID, CatID) VALUES ('{producto.ProID}', '{item}')";
+                    var successCat = await dbConnection.ExecuteAsync(Query, transaction: transacction);
+                }
+
+                transacction.Commit();
+            }
+            catch (Exception)
+            {
+                transacction.Rollback();
                 throw;
             }
         }
