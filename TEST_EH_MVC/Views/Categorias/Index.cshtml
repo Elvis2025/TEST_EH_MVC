@@ -8,13 +8,20 @@
         <div class="mb-3">
             <label asp-for="CatNombre" class="form-label">Nombre</label>
             <input type="text" asp-for="CatNombre" class="form-control" />
+            <span asp-validation-for="CatNombre" class="text-danger"></span>
         </div>
         <div class="mb-3">
             <label asp-for="CatDescripcion" class="form-label">Descripción</label>
             <input type="text" asp-for="CatDescripcion" class="form-control" />
+            <span asp-validation-for="CatDescripcion" class="text-danger"></span>
         </div>
         
 
         <button type="submit" class="btn btn-primary form-control mt-3">Guardar Categoria</button>
     </div>
 </form>
+
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
